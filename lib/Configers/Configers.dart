@@ -10,6 +10,7 @@ String facebookLoginIcon = "assets/images/facebookLogin.png";
 String productView = "assets/images/product.png";
 String noSuggestion = "assets/images/no_suggestion.png";
 String profileImage = "assets/images/profileImage.png";
+String verifyLogo = "assets/images/verify_logo.png";
 
 ///Colors
 

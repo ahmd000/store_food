@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:store_app/Configers/Configers.dart';
 import 'package:store_app/api/controllers/auth_api_controller.dart';
 import 'package:store_app/helpers/helpers.dart';
+import 'package:store_app/models/cityAddresses.dart';
 import 'package:store_app/models/student.dart';
 import 'package:store_app/widgets/app_text_field.dart';
 
@@ -20,6 +22,8 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
   late TextEditingController _nameTextController;
   late TextEditingController _phoneTextController;
   late TextEditingController _confirmPasswordTextController;
+  int? _cityValue;
+  String _gender = "M";
   String? _emailErrorText;
   String? _nameErrorText;
   String? _phoneErrorText;
@@ -47,15 +51,29 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
     super.dispose();
   }
 
+  List<CityAddresses> _cities = <CityAddresses>[
+    CityAddresses(id: 1, name: "Gaza"),
+    CityAddresses(id: 2, name: "Deir Al-Balah"),
+    CityAddresses(id: 3, name: "Khanyounis"),
+    CityAddresses(id: 4, name: "Al Nosyrat"),
+    CityAddresses(id: 5, name: "Al Borayj"),
+    CityAddresses(id: 6, name: "Al Mghazi"),
+    CityAddresses(id: 7, name: "Rafah"),
+    CityAddresses(id: 8, name: "Al Zwayda"),
+    CityAddresses(id: 9, name: "Jbalya"),
+    CityAddresses(id: 10, name: "Beit Lahya"),
+    CityAddresses(id: 11, name: "Biet Hanoon"),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       extendBodyBehindAppBar: false,
-
-     appBar: AppBar(
-       backgroundColor: Colors.white,elevation: 0.0,
-     ),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0.0,
+      ),
       body: Container(
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -66,11 +84,8 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  SizedBox(
-                    height: 75.h,
-                  ),
-
                   Text(
                     'Register \nNew account',
                     style: TextStyle(
@@ -87,13 +102,6 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
                     errorText: _nameErrorText,
                     textInputType: TextInputType.text,
                   ),
-                  // AppTextField(
-                  //   textEditingController: _emailTextController,
-                  //   prefixIcon: Icons.email,
-                  //   hint: 'Email',
-                  //   textInputType: TextInputType.emailAddress,
-                  //   errorText: _emailErrorText,
-                  // ),
                   SizedBox(height: 24.h),
                   AppTextField(
                     textEditingController: _phoneTextController,
@@ -101,6 +109,112 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
                     hint: 'Phone Number',
                     errorText: _phoneErrorText,
                     textInputType: TextInputType.text,
+                  ),
+                  SizedBox(height: 24.h),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 15.h),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "City",
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 15.h),
+                        DropdownButton(
+                          value: _cityValue,
+                          hint: Text(
+                            "select your ciy",
+                            style: TextStyle(color: Colors.amber),
+                          ),
+                          isExpanded: true,
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                            color: Colors.black,
+                          ),
+                          elevation: 20,
+                          onChanged: (int? value) {
+                            if (value != null) {
+                              setState(() {
+                                _cityValue = value;
+                                print(value);
+                              });
+                            }
+                          },
+                          icon: Icon(
+                            Icons.location_city_sharp,
+                            color: Colors.amber,
+                          ),
+                          dropdownColor: Colors.white70,
+                          menuMaxHeight: 300.h,
+                          items: _cities.map((e) {
+                            return DropdownMenuItem(
+                              child: Container(
+                                width: double.infinity,
+                                alignment: AlignmentDirectional.centerStart,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  color: Colors.amber.shade300,
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 10.h , horizontal: 20.w),
+                                  child: Text(
+                                    e.name,
+                                    style: TextStyle(
+                                    ),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                ),
+                              ),
+                              value: e.id,
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 24.h),
+                  Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Gender",
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 15.h),
+                        RadioListTile<String>(
+                          title: Text("Male"),
+                          value: "M",
+                          groupValue: _gender,
+                          onChanged: (String? value) {
+                            if (_gender != null)
+                              setState(() {
+                                _gender = value!;
+                                print("Gender : $value");
+                              });
+                          },
+                        ),
+                        RadioListTile<String>(
+                          title: Text("Female"),
+                          value: "F",
+                          groupValue: _gender,
+                          onChanged: (String? value) {
+                            if (_gender != null)
+                              setState(() {
+                                _gender = value!;
+                                print("Gender : $value");
+                              });
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(height: 24.h),
                   AppTextField(
@@ -122,7 +236,7 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
                   ),
                   SizedBox(height: 24.h),
                   ElevatedButton(
-                    onPressed: () => performRegister(),
+                    //  onPressed: () => performRegister(),
                     child: Text(
                       'Sign Up',
                       style: TextStyle(
@@ -136,6 +250,9 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/verify_screen");
+                    },
                   ),
                   SizedBox(height: 16.h),
                   ElevatedButton(
@@ -218,7 +335,7 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
 
   Future<void> register() async {
     bool status = await AuthApiController().register(context, student: student);
-    if (status) Navigator.pop(context);
+    if (status) Navigator.pushNamed(context, "/verify_screen");
   }
 
   Student get student {

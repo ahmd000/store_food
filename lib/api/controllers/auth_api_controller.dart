@@ -105,7 +105,7 @@ class AuthApiController with Helpers {
 
   Future<bool> resetPassword(
     BuildContext context, {
-    required String email,
+    required String mobile,
     required String code,
     required String password,
   }) async {
@@ -113,7 +113,7 @@ class AuthApiController with Helpers {
     var response = await http.post(
       url,
       body: {
-        'email': email,
+        'email': mobile,
         'code': code,
         'password': password,
         'password_confirmation': password,
