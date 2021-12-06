@@ -6,7 +6,7 @@ import 'package:store_app/Configers/Configers.dart';
 import 'package:store_app/api/controllers/auth_api_controller.dart';
 import 'package:store_app/helpers/helpers.dart';
 import 'package:store_app/models/cityAddresses.dart';
-import 'package:store_app/models/student.dart';
+import 'package:store_app/models/Users.dart';
 import 'package:store_app/widgets/app_text_field.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -17,14 +17,12 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> with Helpers {
-  late TextEditingController _emailTextController;
   late TextEditingController _passwordTextController;
   late TextEditingController _nameTextController;
   late TextEditingController _phoneTextController;
   late TextEditingController _confirmPasswordTextController;
-  int? _cityValue;
-  String _gender = "M";
-  String? _emailErrorText;
+  late int _cityValue;
+  late String _gender;
   String? _nameErrorText;
   String? _phoneErrorText;
   String? _passwordErrorText;
@@ -33,7 +31,6 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _emailTextController = TextEditingController();
     _passwordTextController = TextEditingController();
     _nameTextController = TextEditingController();
     _phoneTextController = TextEditingController();
@@ -43,7 +40,6 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
   @override
   void dispose() {
     // TODO: implement dispose
-    _emailTextController.dispose();
     _passwordTextController.dispose();
     _nameTextController.dispose();
     _phoneTextController.dispose();
@@ -160,11 +156,11 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
                                   color: Colors.amber.shade300,
                                 ),
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 10.h , horizontal: 20.w),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 10.h, horizontal: 20.w),
                                   child: Text(
                                     e.name,
-                                    style: TextStyle(
-                                    ),
+                                    style: TextStyle(),
                                     textAlign: TextAlign.start,
                                   ),
                                 ),
@@ -236,7 +232,6 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
                   ),
                   SizedBox(height: 24.h),
                   ElevatedButton(
-                    //  onPressed: () => performRegister(),
                     child: Text(
                       'Sign Up',
                       style: TextStyle(
@@ -250,13 +245,11 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/verify_screen");
-                    },
+                    onPressed: () => performRegister(),
                   ),
                   SizedBox(height: 16.h),
                   ElevatedButton(
-                    onPressed: () => performRegister(),
+                    onPressed: () {},
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -319,31 +312,43 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
   }
 
   bool checkData() {
-    if (_emailTextController.text.isNotEmpty &&
-        _passwordTextController.text.isNotEmpty &&
-        _nameTextController.text.isNotEmpty &&
-        _phoneTextController.text.isNotEmpty) {
-      return true;
+    if (_passwordTextController.text == _confirmPasswordTextController.text) {
+      if (_nameTextController.text.isNotEmpty &&
+          _phoneTextController.text.isNotEmpty &&
+          _cityValue > 0 &&
+          _gender != null &&
+          _passwordTextController.text.isNotEmpty &&
+          _confirmPasswordTextController.text.isNotEmpty) {
+        return true;
+      }
+      showSnackBar(
+        context: context,
+        message: 'Enter required data!',
+        error: true,
+      );
+      return false;
     }
+
     showSnackBar(
       context: context,
-      message: 'Enter required data!',
+      message: 'Password does not match!',
       error: true,
     );
     return false;
   }
 
   Future<void> register() async {
-    bool status = await AuthApiController().register(context, student: student);
+    bool status = await AuthApiController().register(context, user: user);
     if (status) Navigator.pushNamed(context, "/verify_screen");
   }
 
-  Student get student {
-    Student student = Student();
-    student.fullName = _nameTextController.text;
-    student.email = _emailTextController.text;
-    student.passsword = _passwordTextController.text;
-    student.phone = _phoneTextController.text;
-    return student;
+  Users get user {
+    Users user = Users();
+    user.name = _nameTextController.text;
+    user.mobile = _phoneTextController.text;
+    user.cityId = _cityValue;
+    user.gender = _gender;
+    user.password = _passwordTextController.text;
+    return user;
   }
 }

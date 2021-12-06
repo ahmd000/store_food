@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:store_app/models/student.dart';
+import 'package:store_app/models/Users.dart';
 
-enum PrefKeys { loggedIn, fullName, email, gender, token }
+enum PrefKeys { loggedIn, fullName, phone, gender,city, token }
 
 class SharedPrefController {
   static final SharedPrefController _instance = SharedPrefController._();
@@ -18,16 +18,13 @@ class SharedPrefController {
     _sharedPreferences = await SharedPreferences.getInstance();
   }
 
-  Future<void> save({required Student student}) async {
+  Future<void> save({required Users user}) async {
     await _sharedPreferences.setBool(PrefKeys.loggedIn.toString(), true);
-    await _sharedPreferences.setString(
-        PrefKeys.fullName.toString(), student.fullName);
-    await _sharedPreferences.setString(
-        PrefKeys.email.toString(), student.email);
-    await _sharedPreferences.setString(
-        PrefKeys.gender.toString(), student.gender);
-    await _sharedPreferences.setString(
-        PrefKeys.token.toString(), 'Bearer ' + student.token);
+    await _sharedPreferences.setString(PrefKeys.fullName.toString(), user.name);
+    // await _sharedPreferences.setString(PrefKeys.city.toString(), user.city);
+    await _sharedPreferences.setString(PrefKeys.phone.toString(), user.mobile);
+    await _sharedPreferences.setString(PrefKeys.gender.toString(), user.gender);
+    await _sharedPreferences.setString(PrefKeys.token.toString(), 'Bearer ' + user.token);
   }
 
   bool get loggedIn =>

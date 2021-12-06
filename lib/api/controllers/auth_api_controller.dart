@@ -5,20 +5,21 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:store_app/helpers/helpers.dart';
-import 'package:store_app/models/student.dart';
+import 'package:store_app/models/Users.dart';
 import 'package:store_app/prefs/shared_pref_controller.dart';
 
 import '../api_settings.dart';
 
 class AuthApiController with Helpers {
   Future<bool> register(BuildContext context,
-      {required Student student}) async {
-    var url = Uri.parse(ApiSettings.register);
+      {required Users user}) async {
+    var url = Uri.parse(ApiSettings.registerApi );
     var response = await http.post(url, body: {
-      'full_name': student.fullName,
-      'email': student.email,
-      'password': student.passsword,
-      'phone': student.phone,
+      'name': user.name,
+      'password': user.password,
+      'gender': user.gender,
+      'mobile': user.mobile,
+       // 'city_id': user.cityId,
     });
     if (response.statusCode == 201) {
       showSnackBar(
@@ -46,8 +47,8 @@ class AuthApiController with Helpers {
     if (response.statusCode == 200) {
       //TODO: SHARED PREFERENCES - SAVE LOGGED IN USER DATA!!
       var jsonObject = jsonDecode(response.body)['object'];
-      Student student = Student.fromJson(jsonObject);
-      SharedPrefController().save(student: student);
+      Users student = Users.fromJson(jsonObject);
+      SharedPrefController().save(user: student);
       showSnackBar(
         context: context,
         message: jsonDecode(response.body)['message'],
@@ -113,7 +114,7 @@ class AuthApiController with Helpers {
     var response = await http.post(
       url,
       body: {
-        'email': mobile,
+        'mobile': mobile,
         'code': code,
         'password': password,
         'password_confirmation': password,
