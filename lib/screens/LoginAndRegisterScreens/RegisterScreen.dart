@@ -21,8 +21,8 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
   late TextEditingController _nameTextController;
   late TextEditingController _phoneTextController;
   late TextEditingController _confirmPasswordTextController;
-  late int _cityValue;
-  late String _gender;
+   int? _cityValue = 1;
+   String? _gender = "M";
   String? _nameErrorText;
   String? _phoneErrorText;
   String? _passwordErrorText;
@@ -315,7 +315,7 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
     if (_passwordTextController.text == _confirmPasswordTextController.text) {
       if (_nameTextController.text.isNotEmpty &&
           _phoneTextController.text.isNotEmpty &&
-          _cityValue > 0 &&
+          _cityValue != 0 &&
           _gender != null &&
           _passwordTextController.text.isNotEmpty &&
           _confirmPasswordTextController.text.isNotEmpty) {
@@ -346,8 +346,8 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
     Users user = Users();
     user.name = _nameTextController.text;
     user.mobile = _phoneTextController.text;
-    user.cityId = _cityValue;
-    user.gender = _gender;
+    user.cityId = _cityValue!;
+    user.gender = _gender!;
     user.password = _passwordTextController.text;
     return user;
   }

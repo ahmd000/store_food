@@ -14,23 +14,23 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> with Helpers {
-  late TextEditingController _emailTextController;
+  late TextEditingController _mobileTextController;
   late TextEditingController _passwordTextController;
-  String? _emailErrorText;
+  String? _mobileErrorText;
   String? _passwordErrorText;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _emailTextController = TextEditingController();
+    _mobileTextController = TextEditingController();
     _passwordTextController = TextEditingController();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    _emailTextController.dispose();
+    _mobileTextController.dispose();
     _passwordTextController.dispose();
     super.dispose();
   }
@@ -62,11 +62,11 @@ class _LoginScreenState extends State<LoginScreen> with Helpers {
                 ),
                 SizedBox(height: 112.h),
                 AppTextField(
-                  textEditingController: _emailTextController,
-                  prefixIcon: Icons.email,
-                  hint: 'Email',
-                  textInputType: TextInputType.emailAddress,
-                  errorText: _emailErrorText,
+                  textEditingController: _mobileTextController,
+                  prefixIcon: Icons.phone,
+                  hint: 'Enter Mobile Number',
+                  textInputType: TextInputType.number,
+                  errorText: _mobileErrorText,
                 ),
                 SizedBox(height: 24.h),
                 AppTextField(
@@ -81,7 +81,9 @@ class _LoginScreenState extends State<LoginScreen> with Helpers {
                 Align(
                   alignment: AlignmentDirectional.centerEnd,
                   child: TextButton(
-                    onPressed: () {Navigator.pushNamed(context, "/forget_password_screen");},
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/forget_password_screen");
+                    },
                     child: Text(
                       "Forget password?",
                       style: TextStyle(
@@ -93,8 +95,9 @@ class _LoginScreenState extends State<LoginScreen> with Helpers {
                 ),
                 SizedBox(height: 22.h),
                 ElevatedButton(
-                  // onPressed: () => performLogin(),
-                  onPressed: () => Navigator.pushReplacementNamed(context, '/home_screen'),
+                   onPressed: () => performLogin(),
+                  // onPressed: () =>
+                  //     Navigator.pushReplacementNamed(context, '/home_screen'),
                   child: Text(
                     'Sign In',
                     style: TextStyle(
@@ -139,25 +142,26 @@ class _LoginScreenState extends State<LoginScreen> with Helpers {
                 ),
                 SizedBox(height: 24.h),
                 Container(
-                    padding: EdgeInsets.all(10),
-                    child: Center(
-                      child: RichText(
-                        text: TextSpan(
-                            text: 'Don\'t have an account?',
-                            style: TextStyle(color: Colors.black, fontSize: 18),
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: ' Sign up',
-                                  style: TextStyle(
-                                      color: Colors.blueAccent, fontSize: 18),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      Navigator.pushNamed(
-                                          context, "/register_screen");
-                                    })
-                            ]),
-                      ),
-                    ))
+                  padding: EdgeInsets.all(10),
+                  child: Center(
+                    child: RichText(
+                      text: TextSpan(
+                          text: 'Don\'t have an account?',
+                          style: TextStyle(color: Colors.black, fontSize: 18),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: ' Sign up',
+                                style: TextStyle(
+                                    color: Colors.blueAccent, fontSize: 18),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.pushNamed(
+                                        context, "/register_screen");
+                                  })
+                          ]),
+                    ),
+                  ),
+                )
               ],
             ),
           ],
@@ -173,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> with Helpers {
   }
 
   bool checkData() {
-    if (_emailTextController.text.isNotEmpty &&
+    if (_mobileTextController.text.isNotEmpty &&
         _passwordTextController.text.isNotEmpty) {
       return true;
     }
@@ -188,9 +192,10 @@ class _LoginScreenState extends State<LoginScreen> with Helpers {
   Future<void> login() async {
     bool status = await AuthApiController().login(
       context,
-      email: _emailTextController.text,
+      mobile: _mobileTextController.text,
       password: _passwordTextController.text,
     );
     if (status) Navigator.pushReplacementNamed(context, '/home_screen');
+    print(status);
   }
 }
