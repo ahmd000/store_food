@@ -171,7 +171,7 @@ class _LoginScreenState extends State<LoginScreen> with Helpers {
   }
 
   Future<void> performLogin() async {
-    if (checkData()) {
+    if (checkData())  {
       await login();
     }
   }

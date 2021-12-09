@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:store_app/screens/HomeScreens/HomePagesScreens/CatigoriesTabBar/breakfastView.dart';
+import 'package:get/get.dart';
+import 'package:store_app/get/homeGetxController.dart';
+import 'package:store_app/models/categories.dart';
 
-import 'CatigoriesTabBar/dinnerView.dart';
-import 'CatigoriesTabBar/lunchView.dart';
-import 'CatigoriesTabBar/snackView.dart';
-import 'CatigoriesTabBar/sweetsView.dart';
+import 'CatigoriesTabBar/EmbityCategory/EmbityCategory.dart';
 import 'HomeScreenWigets/SearchHomeScreen.dart';
 
 class HomeFoodScreen extends StatefulWidget {
@@ -16,122 +15,109 @@ class HomeFoodScreen extends StatefulWidget {
   _HomeFoodScreenState createState() => _HomeFoodScreenState();
 }
 
-class _HomeFoodScreenState extends State<HomeFoodScreen>  with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _tabController = TabController(length: 5, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    _tabController.dispose();
-    super.dispose();
-  }
-
+class _HomeFoodScreenState extends State<HomeFoodScreen> {
+  List<Categories> _categories = <Categories>[];
+  HomeGetxController homeGetxController = Get.put(HomeGetxController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 10.h,),
+            SizedBox(height: 10.h),
             Text(
-              'Good morning Ahmad',
+              'Good morning ',
               style: TextStyle(
                 fontSize: 16.sp,
                 color: Color(0xffB8B8B8),
               ),
             ),
-            SizedBox(height: 10.h,),
+            SizedBox(height: 10.h),
             SearchWidget(),
-            SizedBox(height: 10.h,),
-           buildTabBarView(),
+            SizedBox(height: 10.h),
+            categoriesContainer()
           ],
         ),
       ),
     );
   }
 
-  Container buildTabBarView() {
-    return Container(
-          
-           child: Expanded(
-             child: Column(
-               children: [
-                 Container(
-                   child: TabBar(
-                     labelColor: Colors.black,
-                     isScrollable: true,
-                     labelStyle: TextStyle(
-                         fontSize: 16.sp, fontWeight: FontWeight.w700),
-                     unselectedLabelStyle: TextStyle(
-                       fontSize: 12.sp,
-                     ),
-                     indicatorColor: Colors.black,
-                     controller: _tabController,
-                     indicator: BoxDecoration(
-                       color: Color(0xffF2A500),
-                       borderRadius: BorderRadius.circular(30),
-                     ),
-                     tabs: [
-                       Tab(
-                           child: Text(
-                             "Breakfast",
-                             textAlign: TextAlign.center,
-                           )),
-                       Tab(
-                           child: Text(
-                             "Lunch",
-                             // 'Tasks Progress',
-                             textAlign: TextAlign.center,
-                           )),
-                       Tab(
-                           child: Text(
-                             "Dinner",
-                             // 'Tasks Done',
-                             textAlign: TextAlign.center,
-                           )),
-                   Tab(
-                           child: Text(
-                             "Snack",
-                             // 'Tasks Progress',
-                             textAlign: TextAlign.center,
-                           )),
-                       Tab(
-                           child: Text(
-                             "Sweets",
-                             // 'Tasks Done',
-                             textAlign: TextAlign.center,
-                           )),
-                     ],
-                   ),
-                 ),
-                 SizedBox(height: 10.h,),
-                 Expanded(
-                   child: TabBarView(
-                     controller: _tabController,
-                     children: [
-                       breakfastView(),
-                       lunchView(),
-                       dinnerView(),
-                       snackView(),
-                       sweetsView()
+  Container categoriesContainer() => Container(
+        child: Expanded(
+          child: GetBuilder<HomeGetxController>(builder: (controller) {
+            if (controller.isLoading) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (controller.homeResponse != null) {
+              _categories = controller.homeResponse!.categories;
 
-                     ],
-                   ),
-                 ),
-               ],
-             ),
-           ),
-         );
-  }
+              return Container(
+                  child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                        maxCrossAxisExtent: 200,
+                        childAspectRatio: 200 / 250,
+                        crossAxisSpacing: 20,
+                        mainAxisSpacing: 20,
+                      ),
+                      itemCount: _categories.length,
+                      itemBuilder: (BuildContext ctx, index) {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(
+
+                              context,
+                              '/sub_category_screen',
+
+                            );
+                          },
+                          child: Container(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              alignment: AlignmentDirectional.centerStart,
+                              height: 80.h,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  color: Colors.white54,
+                                  borderRadius: BorderRadius.only(
+                                    // topLeft: Radius.circular(50),
+                                    bottomRight: Radius.circular(50),
+                                  )),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    _categories[index].nameEn,
+                                    style: TextStyle(
+                                        fontSize: 30.sp, color: Colors.black),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  // image: AssetImage(productView),
+                                  image:
+                                      NetworkImage(_categories[index].imageUrl),
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(50),
+                                  bottomRight: Radius.circular(50),
+                                )),
+                          ),
+                        );
+                      })
+                  // }
+                  );
+            } else {
+              return EmbityCategory();
+            }
+          }),
+        ),
+      );
 }

@@ -1,7 +1,24 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:store_app/models/Users.dart';
 
-enum PrefKeys { loggedIn, fullName, phone, gender,city, token }
+enum PrefKeys {
+  id,
+  name,
+  password,
+  mobile,
+  gender,
+  active,
+  verified,
+  storeId,
+  fcmToken,
+  token,
+  tokenType,
+  refreshToken,
+  cityEn,
+  cityAr,
+  loggedIn,
+  lang
+}
 
 class SharedPrefController {
   static final SharedPrefController _instance = SharedPrefController._();
@@ -20,12 +37,25 @@ class SharedPrefController {
 
   Future<void> save({required Users user}) async {
     await _sharedPreferences.setBool(PrefKeys.loggedIn.toString(), true);
-    await _sharedPreferences.setString(PrefKeys.fullName.toString(), user.name);
-    // await _sharedPreferences.setString(PrefKeys.city.toString(), user.city);
-    await _sharedPreferences.setString(PrefKeys.phone.toString(), user.mobile);
+    await _sharedPreferences.setInt(PrefKeys.id.toString(), user.id);
+    await _sharedPreferences.setString(PrefKeys.name.toString(), user.name);
+    await _sharedPreferences.setString(
+        PrefKeys.cityEn.toString(), user.city.nameEn);
+    await _sharedPreferences.setString(
+        PrefKeys.cityAr.toString(), user.city.nameAr);
+    await _sharedPreferences.setString(PrefKeys.mobile.toString(), user.mobile);
     await _sharedPreferences.setString(PrefKeys.gender.toString(), user.gender);
-    await _sharedPreferences.setString(PrefKeys.token.toString(), 'Bearer ' + user.token);
+    await _sharedPreferences.setString(PrefKeys.token.toString(), user.token);
+    await _sharedPreferences.setString(
+        PrefKeys.token.toString(), 'Bearer ' + user.token);
   }
+
+  Future<bool> logout() async {
+    return await _sharedPreferences.setBool(
+        PrefKeys.loggedIn.toString(), false);
+  }
+
+
 
   bool get loggedIn =>
       _sharedPreferences.getBool(PrefKeys.loggedIn.toString()) ?? false;
@@ -36,4 +66,11 @@ class SharedPrefController {
   Future<bool> clear() async {
     return await _sharedPreferences.clear();
   }
+
+  Future<void> setLanguage({required String lang}) async {
+    await _sharedPreferences.setString(PrefKeys.lang.toString(), lang);
+  }
+
+  String get language =>
+      _sharedPreferences.getString(PrefKeys.lang.toString()) ?? 'en';
 }

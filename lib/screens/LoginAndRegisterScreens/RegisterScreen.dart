@@ -1,12 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:store_app/Configers/Configers.dart';
 import 'package:store_app/api/controllers/auth_api_controller.dart';
+import 'package:store_app/api/controllers/city_api_controller.dart';
 import 'package:store_app/helpers/helpers.dart';
-import 'package:store_app/models/cityAddresses.dart';
 import 'package:store_app/models/Users.dart';
+import 'package:store_app/models/city.dart';
+import 'package:store_app/prefs/shared_pref_controller.dart';
+import 'package:store_app/screens/LoginAndRegisterScreens/VerfictionScreen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:store_app/widgets/app_text_field.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -21,11 +27,14 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
   late TextEditingController _nameTextController;
   late TextEditingController _phoneTextController;
   late TextEditingController _confirmPasswordTextController;
-   int? _cityValue = 1;
-   String? _gender = "M";
+  int? _selectedAddress;
+  String? _gender = "M";
   String? _nameErrorText;
   String? _phoneErrorText;
   String? _passwordErrorText;
+
+  List<City> _city = <City>[];
+  Future<List<City>>? _future;
 
   @override
   void initState() {
@@ -35,6 +44,8 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
     _nameTextController = TextEditingController();
     _phoneTextController = TextEditingController();
     _confirmPasswordTextController = TextEditingController();
+
+    _future = CityApiController().getCity();
   }
 
   @override
@@ -46,20 +57,6 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
     _confirmPasswordTextController.dispose();
     super.dispose();
   }
-
-  List<CityAddresses> _cities = <CityAddresses>[
-    CityAddresses(id: 1, name: "Gaza"),
-    CityAddresses(id: 2, name: "Deir Al-Balah"),
-    CityAddresses(id: 3, name: "Khanyounis"),
-    CityAddresses(id: 4, name: "Al Nosyrat"),
-    CityAddresses(id: 5, name: "Al Borayj"),
-    CityAddresses(id: 6, name: "Al Mghazi"),
-    CityAddresses(id: 7, name: "Rafah"),
-    CityAddresses(id: 8, name: "Al Zwayda"),
-    CityAddresses(id: 9, name: "Jbalya"),
-    CityAddresses(id: 10, name: "Beit Lahya"),
-    CityAddresses(id: 11, name: "Biet Hanoon"),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +90,7 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
                   SizedBox(height: 75.h),
                   AppTextField(
                     textEditingController: _nameTextController,
+                    obscureText: false,
                     prefixIcon: Icons.person,
                     hint: 'Full Name',
                     errorText: _nameErrorText,
@@ -104,7 +102,7 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
                     prefixIcon: Icons.phone,
                     hint: 'Phone Number',
                     errorText: _phoneErrorText,
-                    textInputType: TextInputType.text,
+                    textInputType: TextInputType.number,
                   ),
                   SizedBox(height: 24.h),
                   Container(
@@ -120,54 +118,66 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
                           ),
                         ),
                         SizedBox(height: 15.h),
-                        DropdownButton(
-                          value: _cityValue,
-                          hint: Text(
-                            "select your ciy",
-                            style: TextStyle(color: Colors.amber),
-                          ),
-                          isExpanded: true,
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            color: Colors.black,
-                          ),
-                          elevation: 20,
-                          onChanged: (int? value) {
-                            if (value != null) {
-                              setState(() {
-                                _cityValue = value;
-                                print(value);
-                              });
-                            }
-                          },
-                          icon: Icon(
-                            Icons.location_city_sharp,
-                            color: Colors.amber,
-                          ),
-                          dropdownColor: Colors.white70,
-                          menuMaxHeight: 300.h,
-                          items: _cities.map((e) {
-                            return DropdownMenuItem(
-                              child: Container(
-                                width: double.infinity,
-                                alignment: AlignmentDirectional.centerStart,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  color: Colors.amber.shade300,
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 10.h, horizontal: 20.w),
-                                  child: Text(
-                                    e.name,
-                                    style: TextStyle(),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ),
-                              ),
-                              value: e.id,
-                            );
-                          }).toList(),
+                        Container(
+                          child: FutureBuilder<List<City>>(
+                              future: _future,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData &&
+                                    snapshot.data!.isNotEmpty) {
+                                  _city = snapshot.data ?? [];
+                                  return DropdownButton(
+                                    items: _city.map((e) {
+                                      return DropdownMenuItem(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: backgroundColor,
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              e.cityName,
+                                              style: TextStyle(fontSize: 20.sp),
+                                            ),
+                                          ),
+                                        ),
+                                        value: e.id,
+                                      );
+                                    }).toList(),
+                                    value: _selectedAddress,
+                                    hint: Text(
+                                      "select your ciy",
+                                      style: TextStyle(color: Colors.amber),
+                                    ),
+                                    isExpanded: true,
+                                    style: TextStyle(
+                                      fontSize: 20.sp,
+                                      color: Colors.black,
+                                    ),
+                                    elevation: 20,
+                                    onChanged: (int? value) {
+                                      if (value != null) {
+                                        setState(() {
+                                          _selectedAddress = value;
+                                        });
+                                      }
+                                    },
+                                    icon: Icon(
+                                      Icons.location_city_sharp,
+                                      color: Colors.amber,
+                                    ),
+                                    dropdownColor: Colors.white70,
+                                    menuMaxHeight: 300.h,
+                                  );
+                                } else {
+                                  return Center(
+                                    child: Text(
+                                      "wait to load cities...",
+                                      style: TextStyle(color: Colors.amber),
+                                    ),
+                                  );
+                                }
+                              }),
                         ),
                       ],
                     ),
@@ -315,7 +325,7 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
     if (_passwordTextController.text == _confirmPasswordTextController.text) {
       if (_nameTextController.text.isNotEmpty &&
           _phoneTextController.text.isNotEmpty &&
-          _cityValue != 0 &&
+          _selectedAddress != 0 &&
           _gender != null &&
           _passwordTextController.text.isNotEmpty &&
           _confirmPasswordTextController.text.isNotEmpty) {
@@ -339,16 +349,29 @@ class _RegisterScreenState extends State<RegisterScreen> with Helpers {
 
   Future<void> register() async {
     bool status = await AuthApiController().register(context, user: user);
-    if (status) Navigator.pushNamed(context, "/verify_screen");
+
+    if (status) {
+      Navigator.pushReplacement(
+
+        context,
+        MaterialPageRoute(
+
+          builder: (context) =>
+              VerfictionScreen(mobile: _phoneTextController.text),
+        ),
+
+      );
+    }
   }
 
   Users get user {
     Users user = Users();
     user.name = _nameTextController.text;
-    user.mobile = _phoneTextController.text;
-    user.cityId = _cityValue!;
-    user.gender = _gender!;
     user.password = _passwordTextController.text;
+    user.mobile = _phoneTextController.text;
+    user.cityId = _selectedAddress!;
+    user.gender = _gender!;
+
     return user;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:store_app/Configers/Configers.dart';
+import 'package:store_app/prefs/shared_pref_controller.dart';
 import 'package:store_app/widgets/out_boarding_contents/out_boarding_content1.dart';
 import 'package:store_app/widgets/out_boarding_contents/out_boarding_content2.dart';
 import 'package:store_app/widgets/out_boarding_contents/out_boarding_content3.dart';
@@ -47,8 +48,10 @@ class _OutBoardingScreenState extends State<OutBoardingScreen> {
               child: Visibility(
                 visible: _currentPage < 2,
                 replacement: TextButton(
-                  onPressed: () =>
-                      Navigator.pushReplacementNamed(context, '/login_screen'),
+                  onPressed: () => SharedPrefController().loggedIn == true
+                      ? Navigator.pushReplacementNamed(context, '/home_screen')
+                      : Navigator.pushReplacementNamed(
+                          context, '/login_screen'),
                   child: Text(
                     'START',
                     style: TextStyle(

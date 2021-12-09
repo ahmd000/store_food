@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:store_app/Configers/Configers.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:store_app/api/controllers/auth_api_controller.dart';
+import 'package:store_app/prefs/shared_pref_controller.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -19,7 +21,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: Colors.white,
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.sp),
-        child: Column(
+        child: ListView(
           children: [
             Container(
               child: Row(
@@ -81,7 +83,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     fontWeight: FontWeight.bold),
               ),
             ),
-
+            Divider(
+              color: Colors.grey,
+              endIndent: 30.sp,
+              indent: 30.sp,
+            ),
             ListTile(
               leading: Icon(Icons.payment),
               trailing: Icon(Icons.navigate_next),
@@ -92,6 +98,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     color: Colors.black,
                     fontWeight: FontWeight.bold),
               ),
+            ),
+            Divider(
+              color: Colors.grey,
+              endIndent: 30.sp,
+              indent: 30.sp,
             ),
             ListTile(
               leading: Icon(Icons.info_outline),
@@ -104,6 +115,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     fontWeight: FontWeight.bold),
               ),
             ),
+            Divider(
+              color: Colors.grey,
+              endIndent: 30.sp,
+              indent: 30.sp,
+            ),
             ListTile(
               leading: Icon(Icons.security),
               trailing: Icon(Icons.navigate_next),
@@ -115,7 +131,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     fontWeight: FontWeight.bold),
               ),
             ),
-
+            Divider(
+              color: Colors.grey,
+              endIndent: 30.sp,
+              indent: 30.sp,
+            ),
             SizedBox(
               height: 32.h,
             ),
@@ -134,13 +154,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             ListTile(
               leading: Icon(Icons.description_outlined),
-              trailing: Switch(onChanged: (bool value) {
-
-                setState(() {
-                  isSwitched = value;
-                  print(isSwitched);
-                });
-              },    value: isSwitched,),
+              trailing: Switch(
+                onChanged: (bool value) {
+                  setState(() {
+                    isSwitched = value;
+                    print(isSwitched);
+                  });
+                },
+                value: isSwitched,
+              ),
               title: Text(
                 "Discount",
                 style: TextStyle(
@@ -149,6 +171,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     fontWeight: FontWeight.bold),
               ),
             ),
+            Divider(
+              color: Colors.grey,
+              endIndent: 30.sp,
+              indent: 30.sp,
+            ),
+
+            Container(
+              alignment: AlignmentDirectional.centerStart,
+              child: Text(
+                "Sign Out ",
+                style: TextStyle(
+                  color: Color(0xff8B8989),
+                  fontSize: 15.sp,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 25.h,
+            ),
+            ListTile(
+              onTap: ()async {
+                bool status = await AuthApiController().logout();
+                await SharedPrefController().clear();
+                if (status) Navigator.pushReplacementNamed(context, '/login_screen');
+                print(status);
+              },
+
+              leading: Icon(Icons.logout_sharp),
+              trailing: Icon(Icons.navigate_next),
+              title: Text(
+                "Sign Out",
+                style: TextStyle(
+                    fontSize: 15.sp,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            Divider(
+              color: Colors.grey,
+              endIndent: 30.sp,
+              indent: 30.sp,
+            ),
+
+
           ],
         ),
       ),

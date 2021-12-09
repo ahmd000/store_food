@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:store_app/api/controllers/auth_api_controller.dart';
 import 'package:store_app/helpers/helpers.dart';
+import 'package:store_app/screens/LoginAndRegisterScreens/ResetPassword.dart';
 import 'package:store_app/widgets/app_text_field.dart';
 import 'package:store_app/widgets/code_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,6 +15,7 @@ class ForgetPassword extends StatefulWidget {
 }
 
 class _ForgetPasswordState extends State<ForgetPassword> with Helpers {
+
   late TextEditingController _phoneTextController;
 
   String? _code;
@@ -59,7 +62,7 @@ class _ForgetPasswordState extends State<ForgetPassword> with Helpers {
           ),
           SizedBox(height: 40.h),
           ElevatedButton(
-            onPressed: () async => await performMobileNumber(),
+            onPressed: () async => await performForgetPassword(),
             child: const Text('RESET PASSWORD'),
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(0, 50),
@@ -94,37 +97,38 @@ class _ForgetPasswordState extends State<ForgetPassword> with Helpers {
     );
   }
 
-  Future<void> performMobileNumber() async {
+  Future<void> performForgetPassword() async {
     if (checkData()) {
-      await resetPassword();
+      await forgetPassword();
     }
   }
 
   bool checkData() {
-    if (checkPhoneNumber()) {
-      return true;
-    }
-    return false;
-  }
-
-  bool checkPhoneNumber() {
     if (_phoneTextController.text.isNotEmpty) {
       return true;
     }
     showSnackBar(
-        context: context, message: 'Mobile Number required!', error: true);
+      context: context,
+      message: 'Enter required data!',
+      error: true,
+    );
     return false;
   }
 
-  Future<void> resetPassword() async {
-    Navigator.pushNamed(context, "/reset_screen");
-
-    // bool status = await AuthApiController().resetPassword(
-    //   context,
-    //   email: widget.email,
-    //   code: _code!,
-    //   password: _newPasswordTextController.text,
-    // );
-    // if (status) Navigator.pop(context);
+  Future<void> forgetPassword() async {
+    bool status = await AuthApiController().forgetPassword(
+      context,
+      mobile: _phoneTextController.text,
+    );
+    if (status) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              ResetPassword(mobile: _phoneTextController.text),
+        ),
+      );
+    }
   }
+
 }

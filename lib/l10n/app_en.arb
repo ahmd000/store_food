@@ -1,0 +1,11 @@
+{
+  "login": "Login",
+  "email": "Email",
+  "password": "Password",
+  "welcome": "Welcome back...",
+  "main": "Main",
+  "name": "Name",
+  "phone": "Phone",
+  "save": "Save",
+  "update": "Update"
+}

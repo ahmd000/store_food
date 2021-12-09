@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:store_app/api/controllers/auth_api_controller.dart';
 import 'package:store_app/helpers/helpers.dart';
+import 'package:store_app/models/city.dart';
 import 'package:store_app/widgets/app_text_field.dart';
 import 'package:store_app/widgets/code_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ResetPassword extends StatefulWidget {
-  const ResetPassword({Key? key}) : super(key: key);
-
+  ResetPassword({Key? key,  required this.mobile}) : super(key: key);
+  final String mobile;
   @override
   _ResetPasswordState createState() => _ResetPasswordState();
 }
@@ -27,6 +29,8 @@ class _ResetPasswordState extends State<ResetPassword> with Helpers {
 
   String? _code;
 
+  List<City> _city = <City>[];
+  late Future<List<City>> _future;
   @override
   void initState() {
     // TODO: implement initState
@@ -151,7 +155,7 @@ class _ResetPasswordState extends State<ResetPassword> with Helpers {
           ),
           SizedBox(height: 30.h),
           ElevatedButton(
-            onPressed: () {}, //async => await performResetPassword(),
+            onPressed: () async => await performResetPassword(),
             child: const Text('RESET'),
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(0, 50),
@@ -164,68 +168,75 @@ class _ResetPasswordState extends State<ResetPassword> with Helpers {
       ),
     );
   }
-//
-//   Future<void> performResetPassword() async {
-//     if (checkData()) {
-//       await resetPassword();
-//     }
-//   }
-//
-//   bool checkData() {
-//     if (checkCode() && checkPassword()) {
-//       return true;
-//     }
-//     return false;
-//   }
-//
-//   bool checkPassword() {
-//     if (_newPasswordTextController.text.isNotEmpty &&
-//         _newPasswordConfirmationTextController.text.isNotEmpty) {
-//       if (_newPasswordTextController.text ==
-//           _newPasswordConfirmationTextController.text) {
-//         return true;
-//       }
-//       showSnackBar(
-//           context: context,
-//           message: 'Password confirmation error!',
-//           error: true);
-//       return false;
-//     }
-//     showSnackBar(context: context, message: 'Enter new password!', error: true);
-//     return false;
-//   }
-//
-//   bool checkCode() {
-//     if (_firstCodeTextController.text.isNotEmpty &&
-//         _secondCodeTextController.text.isNotEmpty &&
-//         _thirdCodeTextController.text.isNotEmpty &&
-//         _fourthCodeTextController.text.isNotEmpty) {
-//       getVerificationCode();
-//       return true;
-//     }
-//     showSnackBar(
-//       context: context,
-//       message: 'Enter verification code',
-//       error: true,
-//     );
-//     return false;
-//   }
-//
-//   String getVerificationCode() {
-//     return _code = _firstCodeTextController.text +
-//         _secondCodeTextController.text +
-//         _thirdCodeTextController.text +
-//         _fourthCodeTextController.text;
-//   }
-//
-// //
-//   Future<void> resetPassword() async {
-//     bool status = await AuthApiController().resetPassword(
-//       context,
-//       email: widget.email,
-//       code: _code!,
-//       password: _newPasswordTextController.text,
-//     );
-//     if (status) Navigator.pop(context);
-//   }
+
+
+  Future<void> performResetPassword() async {
+    if (checkData()) {
+      await resetPassword();
+    }
+  }
+
+  bool checkData() {
+    if (checkCode() && checkPassword()) {
+      return true;
+    }
+    return false;
+  }
+
+  bool checkPassword() {
+    if (_newPasswordTextController.text.isNotEmpty &&
+        _newPasswordConfirmationTextController.text.isNotEmpty) {
+      if (_newPasswordTextController.text ==
+          _newPasswordConfirmationTextController.text) {
+        return true;
+      }
+      showSnackBar(
+        context: context,
+        message: 'Password confirmation error!',
+        error: true,
+      );
+      return false;
+    }
+    showSnackBar(
+      context: context,
+      message: 'Enter New Password!',
+      error: true,
+    );
+    return false;
+  }
+
+  bool checkCode() {
+    if (_firstCodeTextController.text.isNotEmpty &&
+        _secondCodeTextController.text.isNotEmpty &&
+        _thirdCodeTextController.text.isNotEmpty &&
+        _fourthCodeTextController.text.isNotEmpty) {
+      getVerificationCode();
+      return true;
+    }
+    showSnackBar(
+      context: context,
+      message: 'Enter Verification Code!',
+      error: true,
+    );
+    return false;
+  }
+
+  String getVerificationCode() {
+    return _code = _firstCodeTextController.text +
+        _secondCodeTextController.text +
+        _thirdCodeTextController.text +
+        _fourthCodeTextController.text;
+  }
+
+  Future<void> resetPassword() async {
+    bool status = await AuthApiController().resetPassword(
+      context,
+      mobile: widget.mobile,
+      code: _code!,
+      password: _newPasswordTextController.text,
+
+    );
+    if (status) Navigator.pop(context);
+  }
+
 }

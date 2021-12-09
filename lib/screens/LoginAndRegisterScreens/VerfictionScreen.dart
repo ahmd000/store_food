@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:store_app/Configers/Configers.dart';
 import 'package:store_app/api/controllers/auth_api_controller.dart';
@@ -7,8 +9,8 @@ import 'package:store_app/widgets/code_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class VerfictionScreen extends StatefulWidget {
-  const VerfictionScreen({Key? key}) : super(key: key);
-
+  VerfictionScreen({Key? key, required this.mobile}) : super(key: key);
+  final String mobile;
   @override
   _VerfictionScreenState createState() => _VerfictionScreenState();
 }
@@ -44,6 +46,7 @@ class _VerfictionScreenState extends State<VerfictionScreen> with Helpers {
   @override
   void dispose() {
     // TODO: implement dispose
+
     _firstCodeTextController.dispose();
     _secondCodeTextController.dispose();
     _thirdCodeTextController.dispose();
@@ -53,6 +56,7 @@ class _VerfictionScreenState extends State<VerfictionScreen> with Helpers {
     _secondFocusNode.dispose();
     _thirdFocusNode.dispose();
     _fourthFocusNode.dispose();
+
     super.dispose();
   }
 
@@ -129,7 +133,7 @@ class _VerfictionScreenState extends State<VerfictionScreen> with Helpers {
           )),
           const SizedBox(height: 15),
           ElevatedButton(
-            onPressed: () {}, //async => await performResetPassword(),
+            onPressed: () async => await performActivatePhone(),
             child: const Text('Verification'),
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(0, 50),
@@ -145,14 +149,11 @@ class _VerfictionScreenState extends State<VerfictionScreen> with Helpers {
     );
   }
 
-
-  bool checkData() {
+  Future<void> performActivatePhone() async {
     if (checkCode()) {
-      return true;
+      await activatePhone();
     }
-    return false;
   }
-
 
   bool checkCode() {
     if (_firstCodeTextController.text.isNotEmpty &&
@@ -164,7 +165,7 @@ class _VerfictionScreenState extends State<VerfictionScreen> with Helpers {
     }
     showSnackBar(
       context: context,
-      message: 'Enter verification code',
+      message: 'Enter Verification Code!',
       error: true,
     );
     return false;
@@ -177,4 +178,17 @@ class _VerfictionScreenState extends State<VerfictionScreen> with Helpers {
         _fourthCodeTextController.text;
   }
 
+  Future<void> activatePhone() async {
+    bool status = await AuthApiController().activatePhone(
+      context,
+      mobile: widget.mobile,
+      code: _code!,
+    );
+    if (status) {
+      Future.delayed(const Duration(seconds: 1), () {
+        Navigator.pushReplacementNamed(context, '/home_screen');
+      });
+    }
+    // if (status) Navigator.pushReplacementNamed(context, '/home_screen');
+  }
 }

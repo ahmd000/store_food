@@ -25,30 +25,6 @@ class AppTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      // readOnly: true,
-      // onTap: () {
-      //   print('TextField Tapped');
-      // },
-      // maxLength: 45,
-      // minLines: 1,
-      // maxLines: 2,
-      // expands: true,
-      // minLines: null,
-      // maxLines: null,
-
-      // showCursor: true,
-      // cursorWidth: 5,
-      // cursorRadius: Radius.circular(10),
-      // cursorColor: Colors.pink,
-      // cursorHeight: 30,
-
-      // onChanged: (value) {
-      //   print(value);
-      // },
-
-      // buildCounter: (context, {required int currentLength,required bool isFocused, maxLength}) {
-      //   return Text('{$currentLength : 45}');
-      // },
 
       textDirection: TextDirection.ltr,
       textCapitalization: TextCapitalization.none,
@@ -57,44 +33,18 @@ class AppTextField extends StatelessWidget {
       obscureText: obscureText,
       controller: textEditingController,
       decoration: InputDecoration(
-        // counterText: '',
-        // constraints: BoxConstraints(
-        //   minHeight: 10,
-        //   maxHeight: 40,
-        // ),
-        // contentPadding: EdgeInsetsDirectional.zero,
         contentPadding: EdgeInsetsDirectional.zero,
 
         hintText: hint,
         hintMaxLines: 1,
         hintTextDirection: TextDirection.ltr,
         hintStyle: TextStyle(color: Colors.grey),
-
-        // labelText: 'Email',
-        // labelStyle: TextStyle(color: Colors.grey),
-        // floatingLabelBehavior: FloatingLabelBehavior.never,
-
-        // fillColor: Colors.orange,
-        // filled: true,
-
         prefixIcon: Icon(prefixIcon),
-        // prefixText: 'ucas_',
-        // prefixStyle: TextStyle(color: Colors.orange),
-        // prefix: Icon(Icons.email),
-
         suffixIcon: Icon(suffixIcon),
-        // suffixText: '@ucas.ps',
-
         enabled: true,
-        // disabledBorder: InputBorder.none,
         disabledBorder: getBorder(borderColor: Colors.red.shade200),
         enabledBorder: getBorder(),
         focusedBorder: getBorder(borderColor: Colors.blue),
-
-        // helperText: 'username@ucas.ps',
-        // helperStyle: TextStyle(color: Colors.grey),
-        // helperMaxLines: 1,
-
         errorText: errorText,
         errorMaxLines: 1,
         errorBorder: getBorder(borderColor: Colors.red),
