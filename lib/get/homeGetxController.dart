@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:store_app/api/controllers/home_ap_controller.dart';
+import 'package:store_app/models/SubCategories.dart';
 import 'package:store_app/models/home_response.dart';
 
 class HomeGetxController extends GetxController {
@@ -11,6 +12,7 @@ class HomeGetxController extends GetxController {
     // TODO: implement onInit
     super.onInit();
     await getHome();
+
   }
 
   Future<void> getHome() async {

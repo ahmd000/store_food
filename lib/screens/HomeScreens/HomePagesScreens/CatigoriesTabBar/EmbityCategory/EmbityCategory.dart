@@ -16,3 +16,17 @@ Widget EmbityCategory() => Column(
         )
       ],
     );
+Widget SearchCategory() => Column(
+  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          "wait to get best offers for you...",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 32.sp, color: Colors.grey,),
+        ),
+        Image(
+          image: AssetImage(borderView3),
+        )
+      ],
+    );

@@ -1,4 +1,4 @@
-class SubCategory {
+class SubCategory  {
   late int id;
   late String nameEn;
   late String nameAr;

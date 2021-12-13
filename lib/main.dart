@@ -14,7 +14,6 @@ import 'package:store_app/screens/launch_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'get/language_getx_controller.dart';
-import 'screens/HomeScreens/HomePagesScreens/HomeScreenWigets/sub_category_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -59,7 +58,6 @@ class MyApp extends StatelessWidget {
                 "/verify_screen": (context) =>  VerfictionScreen(mobile: '',),
                 "/forget_password_screen": (context) => const ForgetPassword(),
                 "/reset_screen": (context) =>  ResetPassword(mobile: '',),
-                '/sub_category_screen': (context) => const SubCategoryScreen(),
               },
             );
           });

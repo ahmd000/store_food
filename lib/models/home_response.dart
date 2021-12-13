@@ -1,5 +1,3 @@
-import 'package:store_app/models/base_api_Response.dart';
-
 import 'Slider.dart';
 import 'categories.dart';
 import 'products.dart';
@@ -23,6 +21,7 @@ class HomeResponse {
         categories.add(Categories.fromJson(v));
       });
     }
+
     if (json['latest_products'] != null) {
       latestProducts = <Product>[];
       json['latest_products'].forEach((v) {
