@@ -12,8 +12,8 @@ class ApiSettings {
   static const resetPassword = _apiBaseUrl + 'auth/reset-password';
 
   static const home = _apiBaseUrl + 'home';
-  static const categories = _apiBaseUrl + 'categories';
-  static const sub_categories = _apiBaseUrl + 'categories/';
+  static const categories = _apiBaseUrl + 'categories/';
+  static const sub_categories = _apiBaseUrl + 'sub-categories/';
   static const products = _apiBaseUrl + 'products/';
   static const offers = _apiBaseUrl + 'offers';
 
