@@ -8,6 +8,7 @@ import 'package:store_app/models/categories.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 
 import 'CatigoriesTabBar/EmbityCategory/EmbityCategory.dart';
+import 'CatigoriesTabBar/EmbityCategory/banner_widget.dart';
 import 'HomeScreenWigets/SearchHomeScreen.dart';
 import 'HomeScreenWigets/categories_container.dart';
 import 'HomeScreenWigets/famous_container.dart';
@@ -35,17 +36,17 @@ class _HomeFoodScreenState extends State<HomeFoodScreen> {
           );
         } else if (controller.homeResponse != null) {
           return ListView(
-
             shrinkWrap: true,
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             children: [
+              BannerWidget(),
+              SizedBox(height: 30.h),
               SwiperBoxContainer(controller),
               SizedBox(height: 20.h),
               CategoriesContainer(),
               SizedBox(height: 20.h),
               LatestContainer(),
               SizedBox(height: 20.h),
-
               FamousContainer(),
             ],
           );
