@@ -16,6 +16,7 @@ class ApiSettings {
   static const sub_categories = _apiBaseUrl + 'sub-categories/';
   static const products = _apiBaseUrl + 'products/';
   static const offers = _apiBaseUrl + 'offers';
+  static const favorite = _apiBaseUrl + 'favorite-products';
 
 
 }

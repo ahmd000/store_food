@@ -7,8 +7,8 @@ import 'package:store_app/get/homeGetxController.dart';
 import 'package:store_app/models/categories.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 
-import 'CatigoriesTabBar/EmbityCategory/EmbityCategory.dart';
-import 'CatigoriesTabBar/EmbityCategory/banner_widget.dart';
+import 'EmbityCategory/EmbityCategory.dart';
+import 'EmbityCategory/banner_widget.dart';
 import 'HomeScreenWigets/SearchHomeScreen.dart';
 import 'HomeScreenWigets/categories_container.dart';
 import 'HomeScreenWigets/famous_container.dart';

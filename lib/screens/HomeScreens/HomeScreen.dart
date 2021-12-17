@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
     HomeFoodScreen(),
     SuggestFoodScreen(),
     OrderFoodScreen(),
-    FavorateFoodScreen(),
+    FavoriteFoodScreen(),
     ProfileScreen(),
   ];
 

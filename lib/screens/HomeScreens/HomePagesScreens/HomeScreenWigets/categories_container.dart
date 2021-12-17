@@ -6,7 +6,7 @@ import 'package:store_app/Configers/Configers.dart';
 import 'package:store_app/get/homeGetxController.dart';
 import 'package:store_app/helpers/helpers.dart';
 import 'package:store_app/models/categories.dart';
-import 'package:store_app/screens/HomeScreens/HomePagesScreens/CatigoriesTabBar/EmbityCategory/EmbityCategory.dart';
+import 'package:store_app/screens/HomeScreens/HomePagesScreens/EmbityCategory/EmbityCategory.dart';
 import 'package:store_app/screens/HomeScreens/HomePagesScreens/HomeScreenWigets/subCategorySceen.dart';
 
 class CategoriesContainer extends StatefulWidget {

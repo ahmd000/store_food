@@ -10,8 +10,7 @@ Widget EmbityCategory() => Column(
           "wait to get best offers for you...",
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 32.sp, color: Colors.grey,),
-        ),
-        Image(
+        ),        Image(
           image: AssetImage(borderView3),
         )
       ],

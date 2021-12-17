@@ -5,6 +5,8 @@ import 'package:store_app/models/SubCategories.dart';
 import 'package:store_app/models/product_subcategory.dart';
 import 'package:store_app/models/products.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:store_app/screens/HomeScreens/HomePagesScreens/HomeScreenWigets/DetailsProducts.dart';
+import 'package:store_app/screens/HomeScreens/HomePagesScreens/HomeScreenWigets/subcategories_produc_details.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({Key? key, required this.subCategory}) : super(key: key);
@@ -24,7 +26,6 @@ class _ProductScreenState extends State<ProductScreen> {
     _future = HomeApiController().showSubCategoryProduct(widget.subCategory.id);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,22 +34,19 @@ class _ProductScreenState extends State<ProductScreen> {
       ),
       body: FutureBuilder<List<ProductSubCategory>>(
         future: _future,
-        builder:
-            (BuildContext context, AsyncSnapshot<List<ProductSubCategory>> snapshot) {
+        builder: (BuildContext context,
+            AsyncSnapshot<List<ProductSubCategory>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-
             // snapshot.data![index].nameEn
 
-
-
             return Container(
-                padding: EdgeInsets.symmetric(horizontal: 16.sp , vertical: 16.sp),
+                padding:
+                    EdgeInsets.symmetric(horizontal: 16.sp, vertical: 16.sp),
                 child: GridView.builder(
                     scrollDirection: Axis.vertical,
                     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-
                       maxCrossAxisExtent: 400,
                       mainAxisExtent: 250,
                       childAspectRatio: 250 / 300,
@@ -59,13 +57,14 @@ class _ProductScreenState extends State<ProductScreen> {
                     itemBuilder: (BuildContext ctx, index) {
                       return InkWell(
                         onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) =>
-                          //         ProductScreen(subCategory: snapshot.data![index]),
-                          //   ),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SubcategoriesProductDetails(
+                                productSubCategory: snapshot.data![index],
+                              ),
+                            ),
+                          );
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -108,7 +107,6 @@ class _ProductScreenState extends State<ProductScreen> {
                                         snapshot.data![index].nameEn,
                                         style: TextStyle(fontSize: 20.sp),
                                       ),
-
                                     ],
                                   ),
                                 ),
@@ -118,8 +116,8 @@ class _ProductScreenState extends State<ProductScreen> {
                         ),
                       );
                     })
-              // }
-            );
+                // }
+                );
           } else if (snapshot.hasError) {
             return Center(child: Text('NO DaTA: ${snapshot.error.toString()}'));
           } else {
