@@ -53,23 +53,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
             // AppLocalizations.of(context)!.resetPassword,
             'Change Password',
             style: TextStyle(
-              fontFamily: 'Nunito',
               fontSize: 25.sp,
-              color: const Color(0xff23203F),
               fontWeight: FontWeight.bold,
             )),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.language,
-              color: Color(0xff23203f),
-            ),
-          ),
-        ],
         centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        elevation: 15.sp,
       ),
       body: ListView(
         physics: const NeverScrollableScrollPhysics(),
@@ -82,17 +70,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
             'Enter New Password',
             style: TextStyle(
               color: const Color(0xff23203F),
-              fontFamily: 'Nunito',
               fontWeight: FontWeight.bold,
               fontSize: 30.sp,
             ),
           ),
           Text(
             'Are you sure you want to change the password?',
-            style: TextStyle(
-                color: const Color(0xff716F87),
-                fontFamily: 'Nunito',
-                fontSize: 18.sp),
+            style: TextStyle(color: const Color(0xff716F87), fontSize: 18.sp),
           ),
           SizedBox(
             height: 20.h,
@@ -131,7 +115,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
           ElevatedButton(
             onPressed: () async => await performChangePassword(),
             style: ElevatedButton.styleFrom(
-              primary: const Color(0xff6A90F2),
+
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30)),
               minimumSize: Size(0.w, 56.h),
@@ -140,10 +124,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
               'Change Password',
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontFamily: 'Nunito',
-                  fontSize: 22.sp,
+                  fontSize: 25.sp,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white),
+                  ),
             ),
           ),
         ],
@@ -180,7 +163,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
       return false;
     }
     showSnackBar(
-      context:context,
+      context: context,
       message: 'Enter New Password!',
       error: true,
     );
@@ -188,12 +171,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen>
   }
 
   Future<void> changePassword() async {
-  //   bool status = await AuthApiController().resetPassword(
-  //       context,
-  //       mobile: widget.mobile,
-  //       code: _code!,
-  //       password: _newPasswordTextEditingController.text,
-  //   );
-  //   if (status) Navigator.pop(context);
-   }
+    //   bool status = await AuthApiController().resetPassword(
+    //       context,
+    //       mobile: widget.mobile,
+    //       code: _code!,
+    //       password: _newPasswordTextEditingController.text,
+    //   );
+    //   if (status) Navigator.pop(context);
+  }
 }

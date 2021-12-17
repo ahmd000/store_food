@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:store_app/Configers/Configers.dart';
 import 'package:store_app/api/api_helper.dart';
+import 'package:store_app/get/language_getx_controller.dart';
 import 'package:store_app/models/Users.dart';
 import 'package:store_app/models/base_api_object_response.dart';
 import 'package:store_app/prefs/shared_pref_controller.dart';
@@ -177,4 +178,35 @@ class AuthApiController with ApiHelper {
     }
     return false;
   }
+
+
+
+
+
+
+
+  Future<bool> updateProfile(BuildContext context,
+      {required int city_id,
+        required String name,
+        required String gender}) async {
+    var url = Uri.parse(ApiSettings.update_profile);
+    var response = await http.post(url, body: {
+      "city_id": city_id.toString(),
+      "name": name,
+      "gender": gender,
+    }, headers: {
+      HttpHeaders.authorizationHeader: SharedPrefController().token,
+      "lang": LanguageGetXController.to.languageCode.value,
+    });
+    if (response.statusCode == 200) {
+      showSnackBar(context, message: jsonDecode(response.body)["message"]);
+
+      return true;
+    }
+    showSnackBar(context,  message: jsonDecode(response.body)["message"], error: true);
+    return false;
+  }
+
+
+
 }

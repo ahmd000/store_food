@@ -1,19 +1,19 @@
 import 'package:get/get.dart';
 import 'package:store_app/prefs/shared_pref_controller.dart';
+class LanguageGetXController extends GetxController{
 
-class LanguageGetxController extends GetxController {
-  static LanguageGetxController get to => Get.find<LanguageGetxController>();
-  RxString language = 'en'.obs;
+  RxString languageCode = 'ar'.obs;
 
+  static LanguageGetXController get to => Get.find();
   @override
   void onInit() {
     // TODO: implement onInit
-    language.value = SharedPrefController().language;
+    languageCode.value = SharedPrefController().codeLang;
     super.onInit();
   }
 
-  void changeLanguage() {
-    language.value = language.value == 'en' ? 'ar' : 'en';
-    SharedPrefController().setLanguage(lang: language.value);
+  void changeLanguage(String newLangCode){
+    languageCode.value = newLangCode;
+    SharedPrefController().setLanguage(newLangCode);
   }
 }

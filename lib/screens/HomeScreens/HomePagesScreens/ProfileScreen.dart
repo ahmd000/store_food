@@ -105,10 +105,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               indent: 30.sp,
             ),
             ListTile(
+              onTap: (){
+                Navigator.pushNamed(context, "/update_profile");
+              },
               leading: Icon(Icons.info_outline),
               trailing: Icon(Icons.navigate_next),
               title: Text(
-                "Information",
+                "Update Profile",
                 style: TextStyle(
                     fontSize: 15.sp,
                     color: Colors.black,
@@ -121,10 +124,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               indent: 30.sp,
             ),
             ListTile(
+              onTap: (){
+                Navigator.pushNamed(context,   "/change_password");
+              },
               leading: Icon(Icons.security),
               trailing: Icon(Icons.navigate_next),
               title: Text(
-                "Security",
+                "Change Password",
                 style: TextStyle(
                     fontSize: 15.sp,
                     color: Colors.black,

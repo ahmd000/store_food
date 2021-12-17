@@ -17,6 +17,7 @@ class ApiSettings {
   static const products = _apiBaseUrl + 'products/';
   static const offers = _apiBaseUrl + 'offers';
   static const favorite = _apiBaseUrl + 'favorite-products';
+  static const update_profile = _apiBaseUrl + "auth/update-profile";
 
 
 }

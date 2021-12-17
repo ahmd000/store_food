@@ -34,6 +34,9 @@ class SharedPrefController {
   Future<void> initPref() async {
     _sharedPreferences = await SharedPreferences.getInstance();
   }
+  String get gender => _sharedPreferences.getString('gender') ?? "";
+  int get city_id => _sharedPreferences.getInt('city_id') ?? 0;
+  String get userName => _sharedPreferences.getString('name') ?? "";
 
   Future<void> save({required Users user}) async {
     await _sharedPreferences.setBool(PrefKeys.loggedIn.toString(), true);
@@ -67,10 +70,31 @@ class SharedPrefController {
     return await _sharedPreferences.clear();
   }
 
-  Future<void> setLanguage({required String lang}) async {
-    await _sharedPreferences.setString(PrefKeys.lang.toString(), lang);
+  Future<bool> setLanguage(String codeLang) async{
+    return await _sharedPreferences.setString("CodeLang", codeLang);
   }
 
   String get language =>
       _sharedPreferences.getString(PrefKeys.lang.toString()) ?? 'en';
+
+
+
+
+  Future<bool> setGender(String gender) async{
+    return await _sharedPreferences.setString('gender', gender);
+
+  }
+
+
+  Future<bool> setCityId(int cityId) async{
+    return  await _sharedPreferences.setInt('city_id', cityId);
+
+  }
+
+  Future<bool> setUserName(String name) async{
+    return await _sharedPreferences.setString('name', name);
+  }
+
+  String get codeLang => _sharedPreferences.getString("CodeLang") ?? "en";
+
 }

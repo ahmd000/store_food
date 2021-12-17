@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:store_app/screens/HomeScreens/HomePagesScreens/FavorateFoodScreen.dart';
 import 'package:store_app/screens/HomeScreens/HomePagesScreens/HomeFoodScreen.dart';
 import 'package:store_app/screens/HomeScreens/HomePagesScreens/OrderFoodScreen.dart';
 import 'package:store_app/screens/HomeScreens/HomePagesScreens/ProfileScreen.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 
 import 'HomePagesScreens/SuggestFoodScreen.dart';
 
@@ -30,12 +30,12 @@ class _HomeScreenState extends State<HomeScreen> {
       'Suggestion ',
       style: optionStyle,
     ),
+    // Text(
+    //   'Orders',
+    //   style: optionStyle,
+    // ),
     Text(
-      'Orders',
-      style: optionStyle,
-    ),
-    Text(
-      'Favorate',
+      'Favorite',
       style: optionStyle,
     ),
     Text(
@@ -47,62 +47,17 @@ class _HomeScreenState extends State<HomeScreen> {
   static const List<Widget> _homePageScreens = <Widget>[
     HomeFoodScreen(),
     SuggestFoodScreen(),
-    OrderFoodScreen(),
+  //  OrderFoodScreen(),
     FavoriteFoodScreen(),
     ProfileScreen(),
   ];
 
   int _page = 0;
-  GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // extendBodyBehindAppBar: true,
-
-      bottomNavigationBar: CurvedNavigationBar(
-        key: _bottomNavigationKey,
-        index: 0,
-        height: 60.0.h,
-        items: <Widget>[
-          Icon(
-            Icons.food_bank,
-            size: 30.sp,
-            color: Colors.white70,
-          ),
-          Icon(
-            Icons.add_to_photos_outlined,
-            size: 30.sp,
-            color: Colors.white70,
-          ),
-          Icon(
-            Icons.shopping_bag,
-            size: 30.sp,
-            color: Colors.white70,
-          ),
-          Icon(
-            Icons.favorite_outlined,
-            size: 30.sp,
-            color: Colors.white70,
-          ),
-          Icon(
-            Icons.person_pin,
-            size: 30.sp,
-            color: Colors.white70,
-          ),
-        ],
-        color: Colors.amberAccent,
-        buttonBackgroundColor: Colors.amber,
-        backgroundColor: Colors.white,
-        animationCurve: Curves.easeInOut,
-        animationDuration: Duration(milliseconds: 800),
-        onTap: (index) {
-          setState(() {
-            _page = index;
-          });
-        },
-        letIndexChange: (index) => true,
-      ),
       appBar: AppBar(
         leading: Icon(
           Icons.list_alt_outlined,
@@ -116,6 +71,61 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Container(
         // color: Colors.blueAccent,
         child: _homePageScreens.elementAt(_page),
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 20,
+              color: Colors.black.withOpacity(.1),
+            )
+          ],
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+            child: GNav(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+              rippleColor: Colors.grey[300]!,
+              hoverColor: Colors.grey[100]!,
+              gap: 8,
+             
+
+              activeColor: Colors.amber.shade600,
+              iconSize: 24.sp,
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              duration: Duration(milliseconds: 800),
+              tabBackgroundColor: Colors.grey.shade400,
+              color: Colors.amber.shade400,
+              tabs: [
+                GButton(
+                  icon: Icons.home,
+                  text: 'Foodies',
+                ),
+                GButton(
+                  icon: Icons.shopping_bag,
+                  text: 'Suggestion',
+                ),
+                GButton(
+                  icon: Icons.favorite,
+                  text: 'Favorite',
+                ),
+                GButton(
+                  icon: Icons.person,
+                  text: 'Profile',
+                ),
+              ],
+              selectedIndex: _page,
+              onTabChange: (index) {
+                setState(() {
+                  _page = index;
+                });
+              },
+            ),
+          ),
+        ),
       ),
     );
   }
